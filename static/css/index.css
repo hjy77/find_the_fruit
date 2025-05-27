@@ -57,7 +57,7 @@ html {
 
 .publication-title {
   font-family: 'Google Sans', sans-serif;
-  font-size: clamp(1.5rem, 5vw, 3rem);
+  font-size: clamp(1.2rem, 4vw, 2.5rem);
   text-align: center;
   margin-bottom: 1rem;
 }
@@ -224,6 +224,8 @@ html {
 .hero.has-video-bg {
   position: relative;
   overflow: hidden;
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
 
 .hero.has-video-bg video {
@@ -263,4 +265,7 @@ html {
     height: auto !important;
     object-fit: contain !important;
   }
+}
+.hero-body {
+  padding-top: 0.5rem;
 }
