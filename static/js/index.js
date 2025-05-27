@@ -96,3 +96,28 @@ window.addEventListener('orientationchange', () => {
     window.dispatchEvent(new Event('resize'));
   }, 300);
 });
+
+function resizeBannerToVideo() {
+  const video = document.getElementById('bg-video');
+  const banner = document.getElementById('video-banner');
+
+  if (!video || !banner) return;
+
+  // Wait until metadata is loaded (dimensions become available)
+  video.addEventListener('loadedmetadata', () => {
+    const height = video.videoHeight;
+    const width = video.videoWidth;
+
+    // Compute the aspect ratio and scale according to current width
+    const aspectRatio = height / width;
+    const containerWidth = banner.clientWidth;
+    const newHeight = containerWidth * aspectRatio;
+
+    banner.style.height = `${newHeight}px`;
+  });
+}
+
+// Call once in case it's already loaded
+window.addEventListener('load', resizeBannerToVideo);
+// Also reapply on resize
+window.addEventListener('resize', resizeBannerToVideo);
