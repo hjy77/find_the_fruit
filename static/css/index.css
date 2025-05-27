@@ -5,6 +5,7 @@ body {
 
 html {
   overflow-x: hidden;
+  height: 100%;
 }
 
 .footer .icon-link {
@@ -32,9 +33,10 @@ html {
 
 .teaser video {
   text-align: center;
-  margin-left: 2.5%;
-  margin-right: 2.5%;
-  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 100vw;
   max-width: 100%;
   height: auto;
 }
@@ -48,7 +50,9 @@ html {
   left: auto;
   top: auto;
   transform: none;
-  object-fit: fit;
+  object-fit: contain;
+  width: 100%;
+  height: auto;
 }
 
 .publication-title {
@@ -226,33 +230,61 @@ html {
   z-index: 0;
 }
 
-.video-background video {
+.video-background video,
+#bg-video {
   position: absolute;
   top: 50%;
   left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
+  width: 100vw;
   height: auto;
+  /* min-height: 100%;
+  max-height: 100vh; */
   transform: translate(-50%, -50%);
-  object-fit: cover;
+  object-fit: contain;
   z-index: -1;
 }
 
 .has-video-bg {
   position: relative;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
 }
 
-#bg-video {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  min-width: 100%;
-  min-height: 100%;
-  width: auto;
-  height: auto;
-  z-index: -1;
-  transform: translate(-50%, -50%);
-  object-fit: cover;
+/* Responsive Tweaks */
+@media screen and (max-width: 480px) {
+  .carousel-wrapper {
+    padding: 0 10px;
+  }
+
+  .carousel .item img {
+    max-width: 90%;
+  }
+
+  .carousel .item p {
+    max-width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .publication-title {
+    font-size: clamp(1.2rem, 6vw, 2rem);
+  }
+
+  .teaser video {
+    width: 100% !important;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .video-background video,
+  #bg-video {
+    width: 100vw;
+    height: auto;
+    min-height: 100%;
+    max-height: 100vh;
+    object-fit: cover;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 }

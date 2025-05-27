@@ -54,7 +54,7 @@ $(document).ready(function() {
         carousel.start();  // resume autoplay
       });
     });
-    
+
     // Loop on each carousel initialized
     for(var i = 0; i < carousels.length; i++) {
     	// Add listener to  event
@@ -90,3 +90,9 @@ $(document).ready(function() {
     bulmaSlider.attach();
 
 })
+
+window.addEventListener('orientationchange', () => {
+  setTimeout(() => {
+    window.dispatchEvent(new Event('resize'));
+  }, 300);
+});
