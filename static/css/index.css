@@ -269,3 +269,49 @@ html {
 .hero-body {
   padding-top: 0.5rem;
 }
+
+/* Banner hero with fullscreen video */
+#video-banner {
+  position: relative;
+  overflow: hidden;
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#video-banner .hero-body {
+  position: relative;
+  z-index: 2;
+  padding: 4rem 1.5rem;
+}
+#video-banner #bg-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  z-index: 0;
+}
+#video-banner::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 1;
+}
+
+/* Method carousel */
+#method-carousel .item {
+  padding: 1rem 0;
+}
+#method-carousel .item img {
+  max-height: 420px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+}
