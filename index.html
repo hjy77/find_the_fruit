@@ -1,214 +1,358 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="description" content="Find the Fruit: Designing a Zero-Shot Sim2Real Deep RL Planner for Occlusion Aware Plant Manipulation">
-  <meta name="keywords" content="sim2real, deep RL, robotics, agriculture, plant manipulation, occlusion">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Find the Fruit — ICRA 2026</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Find the Fruit: Zero-Shot Sim2Real RL for Occlusion-Aware Plant Manipulation · ICRA 2026</title>
+    <meta name="description" content="Find the Fruit: a sim2real reinforcement learning framework that learns, entirely in simulation, to move stems and leaves aside to reveal hidden fruit, deployed zero-shot on real plants. ICRA 2026.">
+    <meta name="keywords" content="sim2real, deep RL, robotics, agriculture, plant manipulation, occlusion">
+    <meta name="theme-color" content="#161617">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Find the Fruit: Zero-Shot Sim2Real RL for Occlusion-Aware Plant Manipulation">
+    <meta property="og:description" content="Trained entirely in simulation, deployed zero-shot on real plants to uncover hidden fruit. ICRA 2026.">
+    <meta property="og:image" content="static/images/teaser.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍎</text></svg>">
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-CFYY6RZSFF"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-CFYY6RZSFF');
-  </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CFYY6RZSFF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-CFYY6RZSFF');
+    </script>
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍎</text></svg>">
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <link rel="stylesheet" href="static/css/site.css">
 </head>
 
 <body>
 
-  <!-- Banner video + hero -->
-  <section class="hero is-medium is-dark banner" id="video-banner">
-    <video autoplay muted loop playsinline id="bg-video" poster="">
-      <source src="video/banner.mp4" type="video/mp4" />
-    </video>
-    <div class="hero-body">
-      <div class="container has-text-centered">
-        <span class="tag is-warning is-medium" style="margin-bottom: 1rem;">
-          <i class="fas fa-check-circle" style="margin-right: 0.4em;"></i> ICRA 2026 — In Press
-        </span>
-        <h1 class="title is-1 publication-title" style="color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.6);">
-          Find the Fruit
-        </h1>
-        <h2 class="subtitle is-4" style="color: #eee; text-shadow: 0 1px 4px rgba(0,0,0,0.5);">
-          Zero-Shot Sim2Real Deep RL Planner for Occlusion Aware Plant Manipulation
-        </h2>
-      </div>
-    </div>
-  </section>
+    <header class="nav">
+        <nav>
+            <a class="nav-logo" href="#top">Find the Fruit</a>
+            <ul>
+                <li><a href="#method">Method</a></li>
+                <li><a href="#real-world">Real World</a></li>
+                <li><a href="#analysis">Analysis</a></li>
+                <li><a href="#bibtex">BibTeX</a></li>
+            </ul>
+        </nav>
+    </header>
 
-  <!-- Authors -->
-  <section class="section" style="padding-top: 2rem; padding-bottom: 1rem;">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <div class="is-size-5 publication-authors" style="margin-bottom: 0.5rem;">
-            <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=pSmoZbgAAAAJ&hl=en&oi=ao">Nitesh Subedi</a><sup>1,*</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://scholar.google.com/citations?hl=en&user=K5WYa34AAAAJ">Hsin-Jung Yang</a><sup>1,*</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=guk0mCkAAAAJ&hl=en">Devesh K. Jha</a><sup>2</sup>,
-            </span>
-            <span class="author-block">
-              <a href="https://scholar.google.com/citations?user=-rmRjqIAAAAJ&hl=en&oi=ao">Soumik Sarkar</a><sup>1</sup>
-            </span>
-          </div>
+    <main id="top">
+        <!-- ── Hero ── -->
+        <section class="hero">
+            <video class="hero-video" autoplay muted loop playsinline aria-hidden="true">
+                <source src="video/banner.mp4" type="video/mp4">
+            </video>
+            <div class="hero-glow" aria-hidden="true"></div>
+            <div class="hero-content">
+                <p class="venue-pill fade-up">ICRA 2026</p>
+                <h1 class="hero-title fade-up delay-1"><span class="grad">Find the Fruit</span></h1>
+                <p class="hero-subtitle fade-up delay-2">Zero-Shot Sim2Real RL for Occlusion-Aware Plant Manipulation</p>
 
-          <div class="is-size-5 publication-authors" style="margin-bottom: 0.3rem;">
-            <span class="author-block"><sup>1</sup>Iowa State University</span>&nbsp;&nbsp;
-            <span class="author-block"><sup>2</sup>Mitsubishi Electric Research Laboratories</span>
-          </div>
+                <div class="authors fade-up delay-2">
+                    <span><a href="https://scholar.google.com/citations?user=pSmoZbgAAAAJ&amp;hl=en" target="_blank" rel="noopener">Nitesh Subedi</a><sup>1,*</sup></span>
+                    <span><a href="https://scholar.google.com/citations?hl=en&amp;user=K5WYa34AAAAJ" target="_blank" rel="noopener">Hsin-Jung Yang</a><sup>1,*</sup></span>
+                    <span><a href="https://scholar.google.com/citations?user=guk0mCkAAAAJ&amp;hl=en" target="_blank" rel="noopener">Devesh K. Jha</a><sup>2</sup></span>
+                    <span><a href="https://scholar.google.com/citations?user=-rmRjqIAAAAJ&amp;hl=en" target="_blank" rel="noopener">Soumik Sarkar</a><sup>1</sup></span>
+                </div>
+                <div class="affiliations fade-up delay-2">
+                    <span><sup>1</sup>Iowa State University</span>
+                    <span><sup>2</sup>Mitsubishi Electric Research Laboratories</span>
+                </div>
+                <p class="eq fade-up delay-2"><sup>*</sup>Equal contribution</p>
 
-          <div class="is-size-6 publication-authors" style="color: #666; margin-bottom: 1rem;">
-            <span class="author-block"><sup>*</sup>Equal Contribution</span>
-          </div>
+                <div class="links fade-up delay-3">
+                    <a href="https://ieeexplore.ieee.org/abstract/document/11697316" class="btn" target="_blank" rel="noopener">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" />
+                        </svg>
+                        Paper
+                    </a>
+                    <a href="https://arxiv.org/abs/2505.16547" class="btn btn-ghost" target="_blank" rel="noopener">arXiv</a>
+                    <a href="https://github.com/nitesh-subedi/Find_the_Fruit" class="btn btn-ghost" target="_blank" rel="noopener">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                        </svg>
+                        Code
+                    </a>
+                    <a href="https://tinyurl.com/ftfappendix" class="btn btn-ghost" target="_blank" rel="noopener">Appendix</a>
+                    <a href="#video" class="btn btn-ghost">
+                        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M8 5v14l11-7z" />
+                        </svg>
+                        Video
+                    </a>
+                </div>
+            </div>
+        </section>
 
-          <div class="publication-links">
-            <span class="link-block">
-              <a href="https://arxiv.org/abs/2505.16547" class="external-link button is-normal is-rounded is-dark">
-                <span class="icon"><i class="ai ai-arxiv"></i></span>
-                <span>arXiv</span>
-              </a>
-            </span>
-            <span class="link-block">
-              <a href="https://github.com/nitesh-subedi/Find_the_Fruit" class="external-link button is-normal is-rounded is-dark">
-                <span class="icon"><i class="fab fa-github"></i></span>
-                <span>Code</span>
-              </a>
-            </span>
-            <span class="link-block">
-              <a href="#BibTeX" class="external-link button is-normal is-rounded is-dark">
-                <span class="icon"><i class="fas fa-quote-right"></i></span>
-                <span>Cite</span>
-              </a>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+        <!-- ── Key results ── -->
+        <section class="highlights" aria-label="Key results">
+            <div class="highlight">
+                <span class="highlight-num">Zero-shot</span>
+                <span class="highlight-label">Sim-to-real transfer</span>
+                <span class="highlight-ref">trained only in Isaac Lab, no real-world fine-tuning</span>
+            </div>
+            <div class="highlight">
+                <span class="highlight-num">225</span>
+                <span class="highlight-label">Real-world trials</span>
+                <span class="highlight-ref">5 plants × 9 fruit locations × 5 start poses</span>
+            </div>
+            <div class="highlight">
+                <span class="highlight-num">16 / 18</span>
+                <span class="highlight-label">Two-fruit trials fully solved</span>
+                <span class="highlight-ref">same single-fruit policy, no retraining</span>
+            </div>
+            <div class="highlight">
+                <span class="highlight-num">No twin</span>
+                <span class="highlight-label">Abstract plant model</span>
+                <span class="highlight-ref">no plant-specific reconstruction needed</span>
+            </div>
+        </section>
 
-  <!-- Abstract -->
-  <section class="section" style="padding-top: 0.5rem; padding-bottom: 1rem;">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3 has-text-centered">Abstract</h2>
-          <div class="content has-text-justified">
-            <p>
-              This paper presents an end-to-end deep reinforcement learning (RL) framework for occlusion-aware robotic manipulation in cluttered plant environments. Our approach enables a robot to interact with a deformable plant to reveal hidden objects of interest, such as fruits, using multimodal observations. We decouple the kinematic planning problem from robot control to simplify zero-shot sim2real transfer for the trained policy. Our results demonstrate that the trained policy, deployed using our framework, achieves up to 86.7% success in real-world trials across diverse initial conditions. Our findings pave the way toward autonomous, perception-driven agricultural robots that intelligently interact with complex foliage plants to "find the fruit" in challenging occluded scenarios, without the need for explicitly designed geometric and dynamic models of every plant scenario.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+        <!-- ── Overview ── -->
+        <section class="section paper">
+            <div class="inner">
+                <p class="eyebrow">Overview</p>
+                <h2 class="section-title">Trained in simulation. Deployed on real plants.</h2>
+                <p class="lede">Before a robot can pick a fruit, it often has to <em>find</em> it. We train a policy
+                    entirely in simulation to push stems and leaves aside until a hidden fruit is visible, then run it on a
+                    real robot and real plants without any fine-tuning.</p>
+                <figure class="card-figure reveal-zoom">
+                    <img src="static/images/teaser.jpg" alt="Trained in simulation on a generic deformable plant, deployed zero-shot on a real plant with the MyBuddy 280 robot; frame sequences of occlusion removal in simulation and the real world" loading="lazy" decoding="async">
+                </figure>
+                <p class="caption"><strong>Top:</strong> end-to-end RL training on a generic deformable plant in simulation
+                    (left), deployed zero-shot on a real stemmed plant (right) with the MyBuddy 280 robot (center).
+                    <strong>Bottom:</strong> frame-by-frame occlusion removal in simulation and in real-world trials, showing
+                    that a policy trained on an abstract plant model generalizes to physical plants.</p>
+            </div>
+        </section>
 
-  <!-- Method figures -->
-  <section class="section" style="padding-top: 0.5rem;">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Method</h2>
+        <!-- ── Abstract ── -->
+        <section class="section">
+            <div class="inner narrow">
+                <p class="eyebrow">Abstract</p>
+                <p class="abstract">Autonomous harvesting in the open presents a complex manipulation problem. In most
+                    scenarios, an autonomous system has to deal with significant occlusion and require interaction in the
+                    presence of large structural uncertainties (every plant is different). Perceptual and modeling
+                    uncertainty make design of reliable manipulation controllers for harvesting challenging, resulting in
+                    poor performance during deployment. We present a sim2real reinforcement learning (RL) framework for
+                    occlusion-aware plant manipulation, where a policy is learned entirely in simulation to reposition stems
+                    and leaves to reveal target fruit(s). In our proposed approach, we decouple high-level kinematic planning
+                    from low-level compliant control which simplifies the sim2real transfer. This decomposition allows the
+                    learned policy to generalize across multiple plants with different stiffness and morphology. In
+                    experiments with multiple real-world plant setups, our system achieves up to 86.7% success in exposing
+                    target fruits, demonstrating robustness to occlusion variation and structural uncertainty.</p>
+            </div>
+        </section>
 
-      <div class="content has-text-centered" style="margin-bottom: 2rem;">
-        <img src="static/images/framework.png" alt="Framework overview" style="max-width: 100%; border-radius: 12px; box-shadow: 0 2px 16px rgba(0,0,0,0.08);">
-        <p style="max-width: 700px; margin: 0.5rem auto; font-size: 0.95rem;">
-          <b>(a)</b> Hierarchical control: high-level RL planner in task-configuration space + low-level actuator controller.
-        </p>
-      </div>
+        <!-- ── Video ── -->
+        <section class="section dark" id="video">
+            <div class="inner">
+                <p class="eyebrow">Video</p>
+                <h2 class="section-title">Watch it find the fruit.</h2>
+                <div class="video-frame reveal-zoom">
+                    <video controls muted playsinline preload="metadata">
+                        <source src="video/results.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </section>
 
-      <div class="content has-text-centered" style="margin-bottom: 2rem;">
-        <img src="static/images/training.png" alt="Training pipeline" style="max-width: 100%; border-radius: 12px; box-shadow: 0 2px 16px rgba(0,0,0,0.08);">
-        <p style="max-width: 700px; margin: 0.5rem auto; font-size: 0.95rem;">
-          <b>(b)</b> RL agent learns kinematic exploration behaviors in simulation to expose occluded fruits.
-        </p>
-      </div>
+        <!-- ── Method ── -->
+        <section class="section" id="method">
+            <div class="inner">
+                <p class="eyebrow">Method</p>
+                <h2 class="section-title">Plan the motion. Let the controller handle contact.</h2>
+                <p class="lede">Contact with a deformable plant is hard to model and harder to transfer. So the learned
+                    policy only decides <em>where</em> the arm should go, and a compliant low-level controller decides
+                    <em>how</em> to get there safely on the real robot.</p>
+                <div class="steps">
+                    <article class="step">
+                        <span class="step-num">1</span>
+                        <h3>Simulate a generic plant.</h3>
+                        <p>An abstract finite-element plant in Isaac Lab, with a central stem, occluding leaves, and a hidden
+                            fruit. Plant pose, lighting, textures, torque, sensor noise, and fruit placement are all
+                            randomized.</p>
+                    </article>
+                    <article class="step">
+                        <span class="step-num">2</span>
+                        <h3>Learn to reveal with RL.</h3>
+                        <p>A PPO policy maps RGB-D images, joint angles, and end-effector position to delta joint angles. It
+                            is rewarded for reducing occlusion, reaching and holding full visibility, and staying still once
+                            the fruit is found.</p>
+                    </article>
+                    <article class="step">
+                        <span class="step-num">3</span>
+                        <h3>Deploy on real hardware.</h3>
+                        <p>The frozen policy runs on a MyBuddy 280 with a RealSense camera over ROS 2. A servo position
+                            controller tracks its commands without exerting excessive force on the plant.</p>
+                    </article>
+                </div>
 
-      <div class="content has-text-centered">
-        <img src="static/images/deployment.png" alt="Deployment pipeline" style="max-width: 100%; border-radius: 12px; box-shadow: 0 2px 16px rgba(0,0,0,0.08);">
-        <p style="max-width: 700px; margin: 0.5rem auto; font-size: 0.95rem;">
-          <b>(c)</b> Trained policy receives real-time RGB-D + proprioception → task-space actions → physical robot.
-        </p>
-      </div>
+                <figure class="card-figure reveal-zoom">
+                    <img src="static/images/framework_overview.png" alt="Framework overview: in simulation the agent receives RGB, depth and a training-only fruit mask; in the real world the trained policy receives RGB and depth and sends actions to a low-level controller" loading="lazy" decoding="async">
+                </figure>
+                <p class="caption"><strong>Sim:</strong> the robot interacts with an abstract plant in Isaac Lab, receiving
+                    RGB, depth, and a fruit mask (training only). <strong>Real:</strong> the trained policy runs on the
+                    MyBuddy 280; an RGB-D camera provides observations and a low-level controller executes the high-level
+                    commands for safe interaction with real plants.</p>
 
-    </div>
-  </section>
+                <div class="objective">
+                    <div>
+                        <h3>A mask that helps, then disappears.</h3>
+                        <p>During training the policy also sees a ground-truth fruit mask. It speeds up learning on heavily
+                            occluded fruit, but the deployed policy relies only on RGB-D and proprioception.</p>
+                    </div>
+                    <div>
+                        <h3>Behavior that emerges.</h3>
+                        <p>After ~50M simulation steps, the policy locates the stem and fruit, slides the end-effector along
+                            the stem, pushes occluding foliage aside, and stops once the fruit is exposed. It reaches 96.1%
+                            success over 20,000 randomized simulated episodes.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <!-- Results video -->
-  <section class="section hero is-light" style="padding: 2rem 0;">
-    <div class="hero-body">
-      <div class="container is-max-desktop has-text-centered">
-        <h2 class="title is-3">Results</h2>
-        <div style="max-width: 900px; margin: 0 auto;">
-          <video width="100%" muted playsinline autoplay controls style="border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.12);">
-            <source src="video/results.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </section>
+        <!-- ── Real world ── -->
+        <section class="section dark" id="real-world">
+            <div class="inner">
+                <p class="eyebrow">Real-world experiments</p>
+                <h2 class="section-title">Five real plants. 225 trials. No fine-tuning.</h2>
+                <p class="lede">Each plant was tested with the fruit at nine positions (a 3 × 3 grid 20 cm behind the
+                    plant) from five collision-free starting poses. Success means at least 90% of the fruit is visible for
+                    five consecutive frames. All plants are artificial and differ in stiffness and shape.</p>
 
-  <!-- Acknowledgements -->
-  <section class="section" style="padding-bottom: 0.5rem;">
-    <div class="container is-max-desktop">
-      <h2 class="title is-3 has-text-centered">Acknowledgements</h2>
-      <div class="content has-text-justified">
-        <p>
-          This work is jointly funded from NSF-USDA COALESCE grant #2021-67021-34418 and AIIRA grant #2021-67021-35329.
-        </p>
-      </div>
-    </div>
-  </section>
+                <div class="plant-row">
+                    <div class="plant">
+                        <span class="plant-name">Plant I</span>
+                        <span class="plant-sr">84.4%</span>
+                        <div class="plant-bar"><span style="width: 84.4%"></span></div>
+                        <p class="plant-desc">Central stem, broad foliage</p>
+                    </div>
+                    <div class="plant">
+                        <span class="plant-name">Plant II</span>
+                        <span class="plant-sr">86.7%</span>
+                        <div class="plant-bar"><span style="width: 86.7%"></span></div>
+                        <p class="plant-desc">Plant I, double-reinforced</p>
+                    </div>
+                    <div class="plant">
+                        <span class="plant-name">Plant III</span>
+                        <span class="plant-sr">86.6%</span>
+                        <div class="plant-bar"><span style="width: 86.6%"></span></div>
+                        <p class="plant-desc">Plant I, triple-reinforced</p>
+                    </div>
+                    <div class="plant">
+                        <span class="plant-name">Plant IV</span>
+                        <span class="plant-sr">71.1%</span>
+                        <div class="plant-bar"><span style="width: 71.1%"></span></div>
+                        <p class="plant-desc">Stemmed, similar to Plant I</p>
+                    </div>
+                    <div class="plant hard">
+                        <span class="plant-name">Plant V</span>
+                        <span class="plant-sr">28.9%</span>
+                        <div class="plant-bar"><span style="width: 28.9%"></span></div>
+                        <p class="plant-desc">Bushy, no clear stem, stiffest</p>
+                    </div>
+                </div>
 
-  <!-- BibTeX -->
-  <section class="section" id="BibTeX">
-    <div class="container is-max-desktop content">
-      <h2 class="title is-3">BibTeX</h2>
-      <pre><code>@inproceedings{subedi2025find,
-  title     = {Find the Fruit: Designing a Zero-Shot Sim2Real Deep RL Planner
-               for Occlusion Aware Plant Manipulation},
-  author    = {Subedi, Nitesh and Yang, Hsin-Jung and Jha, Devesh K
-               and Sarkar, Soumik},
-  booktitle = {Proceedings of the IEEE International Conference on
-               Robotics and Automation (ICRA)},
+                <figure class="card-figure reveal-zoom">
+                    <img src="static/images/plants.jpg" alt="The five artificial plants used in real-world experiments, including reinforced variants and a dense bushy plant" loading="lazy" decoding="async">
+                </figure>
+                <p class="caption">Plants I and IV have a clear central stem similar to the simulated plant. Plants II and
+                    III are double- and triple-reinforced versions of Plant I. Plant V is dense and bushy with no distinct
+                    central stem, the hardest case for both perception and actuation.</p>
+
+                <figure class="card-figure reveal-zoom">
+                    <img src="static/images/real_world_results.png" alt="Experimental fruit locations, initial arm configurations, and success heatmaps across plants, fruit locations and initial configurations" loading="lazy" decoding="async">
+                </figure>
+                <p class="caption"><strong>(a)</strong> Fruit locations A–I behind the plant. <strong>(b)</strong> The five
+                    initial arm configurations α–ε. <strong>(c)</strong> Successes per plant and fruit location (out of
+                    five). <strong>(d)</strong> Successes per plant and start pose (out of nine). Circles mark torque
+                    saturation, the main cause of failure on the stiffest plant.</p>
+            </div>
+        </section>
+
+        <!-- ── Multi-fruit ── -->
+        <section class="section paper">
+            <div class="inner">
+                <p class="eyebrow">Generalization</p>
+                <h2 class="section-title">Trained for one fruit. Finds two.</h2>
+                <p class="lede">With no architecture changes, the same policy handles sequential exposure: once a fruit is
+                    uncovered it is removed, and the robot keeps going without a reset. Both fruits were exposed in
+                    <em>16 of 18</em> two-fruit trials on Plant I. The second fruit took only 50–150 steps, since removing
+                    the first one already reduced occlusion.</p>
+                <figure class="card-figure compact reveal-zoom">
+                    <img src="static/images/multi_fruit.png" alt="Heatmap of fruits uncovered for each pair of first and second fruit locations" loading="lazy" decoding="async">
+                </figure>
+                <p class="caption">Fruits uncovered (0–2) for each pair of first (A–C) and second (D–F) fruit locations.
+                    Failures occur only when both fruits are heavily occluded under one starting pose, where torque limits
+                    prevent full exposure.</p>
+            </div>
+        </section>
+
+        <!-- ── Analysis ── -->
+        <section class="section" id="analysis">
+            <div class="inner">
+                <p class="eyebrow">Analysis</p>
+                <h2 class="section-title">What makes transfer work.</h2>
+
+                <div class="grid-2 cards">
+                    <article class="card">
+                        <h3>Visual realism matters. A digital twin doesn’t.</h3>
+                        <p>A policy trained with realistic textures and lighting transferred to real plants. One trained in a
+                            low-fidelity version with flat textures and simple lighting behaved erratically and could not be
+                            deployed. The plant model itself is generic, not a reconstruction of any test plant.</p>
+                    </article>
+                    <article class="card">
+                        <h3>Most failures are mechanical.</h3>
+                        <p>On stiff plants the arm hits its torque limits; even failed trials often reach 70–80% visibility.
+                            Softening the plant while keeping its appearance (Plant VI) lifts success to 80% across valid fruit
+                            positions. Depth artifacts from the RealSense, such as ghosted stems, account for some other
+                            misses.</p>
+                    </article>
+                </div>
+
+                <figure class="card-figure reveal-zoom">
+                    <img src="static/images/ablations.png" alt="Ablations: a softened plant, success heatmap comparing the original and softened plant, training curves with and without the fruit mask, and evaluation with and without the mask" loading="lazy" decoding="async">
+                </figure>
+                <p class="caption"><strong>(a)</strong> Plant VI, a mechanically more compliant variant with the same
+                    visual complexity. <strong>(b)</strong> Success on Plants V and VI across fruit locations.
+                    <strong>(c)</strong> Training with the privileged fruit mask converges faster to higher returns.
+                    <strong>(d)</strong> Removing the mask at test time has negligible effect.</p>
+            </div>
+        </section>
+
+        <!-- ── BibTeX ── -->
+        <section class="section paper" id="bibtex">
+            <div class="inner narrow">
+                <p class="eyebrow">Citation</p>
+                <h2 class="section-title">BibTeX</h2>
+                <div class="bibtex">
+                    <button class="copy-btn" type="button" data-copy="bibtex-code">Copy</button>
+<pre><code id="bibtex-code">@inproceedings{subedi2025find,
+  title     = {Find the Fruit: Zero-Shot Sim2Real RL for Occlusion-Aware Plant Manipulation},
+  author    = {Subedi, Nitesh and Yang, Hsin-Jung and Jha, Devesh K. and Sarkar, Soumik},
+  booktitle = {Proceedings of the IEEE International Conference on Robotics and Automation (ICRA)},
   year      = {2026}
 }</code></pre>
-    </div>
-  </section>
+                </div>
+                <p class="ack">This work is jointly funded by the NSF–USDA COALESCE program (NSF award #1954556; USDA award
+                    #2021-67021-34418) and AIIRA grant #2021-67021-35329.</p>
+            </div>
+        </section>
+    </main>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="columns is-centered">
-        <div class="column is-8">
-          <div class="content has-text-centered">
-            <p>
-              This website is licensed under a
-              <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
-            </p>
-            <p>
-              Website source code based on the
-              <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> project page.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
+    <footer>
+        <p>This website is licensed under a <a rel="license noopener" href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative Commons Attribution-ShareAlike 4.0 International License</a>.</p>
+    </footer>
 
-  </body>
+    <script src="static/js/main.js" defer></script>
+</body>
+
 </html>
